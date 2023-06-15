@@ -28,6 +28,8 @@ RUN wget -q https://www.mathworks.com/mpm/glnxa64/mpm \
     --release=${MATLAB_RELEASE} \
     --destination=/opt/matlab/${MATLAB_RELEASE} \
     --products MATLAB \
+               Aerospace_Toolbox \
+               Aerospace_Blockset \
                Computer_Vision_Toolbox \
                Curve_Fitting_Toolbox \
                Image_Processing_Toolbox \
@@ -35,6 +37,7 @@ RUN wget -q https://www.mathworks.com/mpm/glnxa64/mpm \
                MATLAB_Compiler \
                MATLAB_Compiler_SDK \
                Optimization_Toolbox \
+               Control_System_Toolbox \
                Robotics_System_Toolbox \
                ROS_Toolbox \
                Simscape \
@@ -57,6 +60,9 @@ RUN adduser --shell /bin/bash --disabled-password --gecos "" matlab \
 
 ENV USER=matlab
 USER $USER
+
+# Make user owner of MATLAB installation directory.
+RUN sudo chown -R $USER:$USER /opt/matlab
 
 # Install ROS
 RUN sudo apt update
