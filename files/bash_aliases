@@ -1,0 +1,5 @@
+alias myip="ifconfig | sed -En 's/127.0.0.1//;s/.*inet (addr:)?(([0-9]*\.){3}[0-9]*).*/\2/p'"
+
+cfstart () {
+  roslaunch crazyflie_demo uas_31390_crazyflie_server.launch channel:=$1
+}
