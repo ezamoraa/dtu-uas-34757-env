@@ -13,10 +13,10 @@ It is advisable to also follow the [Linux Post-installation steps](https://docs.
 ./docker-pull.sh
 ```
 
-2. Run the docker container specifiying a shared folder path between the host and the container:
+2. Run the docker container specifiying a shared folder path between the host and the container (absolute path):
 
 ```bash
-./docker-run.sh <shared-path>
+./docker-run.sh /path/to/shared/folder
 ```
 
 3. To open more terminals in the running container:
