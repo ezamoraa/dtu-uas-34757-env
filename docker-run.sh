@@ -1,5 +1,6 @@
 #!/bin/bash
 SHARED_DIR=${1:-$(pwd)}
+VERSION=${VERSION:-`cat version`}
 
 docker run -it \
     --name dtu_uas \
@@ -10,4 +11,4 @@ docker run -it \
 	-v $SHARED_DIR:/home/matlab/shared \
 	-v /dev:/dev \
 	--shm-size=512M \
-	ezamoraa/dtu_uas_34757 bash
+	ezamoraa/dtu_uas_34757:$VERSION bash
