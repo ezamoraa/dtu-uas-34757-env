@@ -20,6 +20,13 @@ RUN export DEBIAN_FRONTEND=noninteractive \
     && apt-get autoremove \
     && rm -rf /var/lib/apt/lists/*
 
+ENV USER=matlab
+
+# Add "matlab" user and grant sudo permission.
+RUN adduser --shell /bin/bash --disabled-password --gecos "" matlab \
+    && echo "matlab ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/matlab \
+    && chmod 0440 /etc/sudoers.d/matlab
+
 # Run mpm to install MATLAB in the target location and delete the mpm installation afterwards.
 # If mpm fails to install successfully, then print the logfile in the terminal, otherwise clean up.
 RUN wget -q https://www.mathworks.com/mpm/glnxa64/mpm \
@@ -37,7 +44,6 @@ RUN wget -q https://www.mathworks.com/mpm/glnxa64/mpm \
                MATLAB_Compiler \
                MATLAB_Compiler_SDK \
                Optimization_Toolbox \
-               Control_System_Toolbox \
                Robotics_System_Toolbox \
                ROS_Toolbox \
                Simscape \
@@ -51,18 +57,10 @@ RUN wget -q https://www.mathworks.com/mpm/glnxa64/mpm \
                UAV_Toolbox \
     || (echo "MPM Installation Failure. See below for more information:" && cat /tmp/mathworks_root.log && false) \
     && rm -f mpm /tmp/mathworks_root.log \
-    && ln -s /opt/matlab/${MATLAB_RELEASE}/bin/matlab /usr/bin/matlab
+    && ln -s /opt/matlab/${MATLAB_RELEASE}/bin/matlab /usr/bin/matlab \
+    && chown -R $USER:$USER /opt/matlab
 
-# Add "matlab" user and grant sudo permission.
-RUN adduser --shell /bin/bash --disabled-password --gecos "" matlab \
-    && echo "matlab ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/matlab \
-    && chmod 0440 /etc/sudoers.d/matlab
-
-ENV USER=matlab
 USER $USER
-
-# Make user owner of MATLAB installation directory.
-RUN sudo chown -R $USER:$USER /opt/matlab
 
 # Install ROS
 RUN sudo apt update

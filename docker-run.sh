@@ -1,7 +1,7 @@
 #!/bin/bash
 SHARED_DIR=${1:-$(pwd)}
 
-docker run -it --rm \
+docker run -it \
     --name dtu_uas \
     -e DISPLAY=$DISPLAY \
     --privileged \
